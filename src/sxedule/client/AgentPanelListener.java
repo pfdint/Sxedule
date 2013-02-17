@@ -6,17 +6,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
-import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
 
 class AgentPanelListener implements MouseInputListener, MouseWheelListener, KeyListener {
     
-    private AsynchronousNetworkCommunicator networkCommunicator;
+    private GUI gui;
     
-    private AgentPanel agentPanel;
-    
-    AgentPanelListener(AsynchronousNetworkCommunicator networkCommunicator, AgentPanel agentPanel) {
-        this.networkCommunicator = networkCommunicator;
-        this.agentPanel = agentPanel;
+    AgentPanelListener(GUI gui) {
+        this.gui = gui;
     }
     
 //               

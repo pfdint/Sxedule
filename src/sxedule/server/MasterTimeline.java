@@ -3,6 +3,7 @@ package sxedule.server;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
@@ -46,9 +47,9 @@ public class MasterTimeline implements Serializable {
     public MasterTimeline() {
         connectionSet = new HashSet<>();
         inputParser = new InputParser(this);
-        agents = new HashSet<>();
+        agents = new LinkedHashSet<>();
         agentIDMap = new HashMap<>();
-        activities = new HashSet<>();
+        activities = new LinkedHashSet<>();
         activityIDMap = new HashMap<>();
     }
     
@@ -68,12 +69,6 @@ public class MasterTimeline implements Serializable {
         }
     }
     
-    private void broadcastUpdate(String updateMessage) {
-        for (AsynchronousNetworkCommunicator connection : connectionSet) {
-            connection.output(updateMessage);
-        }
-    }
-    
 //   db     dP""b8 888888 88b 88 888888     8b    d8 888888 888888 88  88  dP"Yb  8888b.  .dP"Y8 
 //  dPYb   dP   `" 88__   88Yb88   88       88b  d88 88__     88   88  88 dP   Yb  8I  Yb `Ybo." 
 // dP__Yb  Yb  "88 88""   88 Y88   88       88YbdP88 88""     88   888888 Yb   dP  8I  dY o.`Y8b 
@@ -88,7 +83,7 @@ public class MasterTimeline implements Serializable {
         
         agents.add(createdAgent);
         
-        broadcastUpdate("agent add " + (agentIDLabeler - 1));
+        broadcastMessage("agent add " + (agentIDLabeler - 1));
         
     }
     
@@ -115,37 +110,44 @@ public class MasterTimeline implements Serializable {
             case "Title":
             case "TITLE":
             case "title": agentToModify.setTitle(value);
+            broadcastMessage("agent edit " + agentID + " title\"" + value + "\"");
                 break;
             case "FirstName":
             case "Firstname":
             case "FIRSTNAME":
             case "firstname": agentToModify.setFirstName(value);
+            broadcastMessage("agent edit " + agentID + " firstname\"" + value + "\"");
                 break;
             case "LastName":
             case "Lastname":
             case "LASTNAME":
             case "lastname": agentToModify.setLastName(value);
+            broadcastMessage("agent edit " + agentID + " lastname\"" + value + "\"");
                 break;
             case "UniqueTitle":
             case "Uniquetitle":
             case "UNIQUETITLE":
             case "uniquetitle": agentToModify.setUniqueTitle(value);
+            broadcastMessage("agent edit " + agentID + " uniquetitle\"" + value + "\"");
                 break;
             case "Flags":
             case "FLAGS":
             case "flags": agentToModify.addToFlags(value);
+            broadcastMessage("agent edit " + agentID + " flags\"" + value + "\"");
                 break;
             case "PreferenceMap":
             case "Preferencemap":
             case "preferenceMap":
             case "PREFERENCEMAP":
             case "preferencemap": agentToModify.addToPreferenceMap(value);
+            broadcastMessage("agent edit " + agentID + " preferencemap\"" + value + "\"");
                 break;
             case "PersonalTimeline":
             case "Personaltimeline":
             case "personalTimeline":
             case "PERSONALTIMELINE":
             case "personaltimeline": agentToModify.addToPersonalTimeline(activityIDMap.get(Integer.parseInt(value)));
+            broadcastMessage("agent edit " + agentID + " personalTimeline\"" + value + "\"");
                 break;
         }
         
@@ -153,7 +155,7 @@ public class MasterTimeline implements Serializable {
     
     public synchronized void deleteAgent(int agentID) {
         agents.remove(agentIDMap.remove(agentID));
-        broadcastUpdate("agent delete " + agentID);
+        broadcastMessage("agent delete " + agentID);
     }
     
 //   db     dP""b8 888888 88 Yb    dP 88 888888 Yb  dP     8b    d8 888888 888888 88  88  dP"Yb  8888b.  .dP"Y8 
@@ -170,7 +172,7 @@ public class MasterTimeline implements Serializable {
         
         activities.add(createdActivity);
         
-        broadcastUpdate("activity add " + (activityIDLabeler - 1));
+        broadcastMessage("activity add " + (activityIDLabeler - 1));
         
     }
     
@@ -192,72 +194,85 @@ public class MasterTimeline implements Serializable {
             case "startTime":
             case "STARTTIME":
             case "starttime": activityToModify.setStartTime(Long.parseLong(value));
+            broadcastMessage("activity edit " + activityID + " starttime\"" + value + "\"");
                 break;
             case "EndTime":
             case "Endtime":
             case "endTime":
             case "ENDTIME":
             case "endtime": activityToModify.setEndTime(Long.parseLong(value));
+            broadcastMessage("activity edit " + activityID + " endtime\"" + value + "\"");
                 break;
             case "MinCampers":
             case "Mincampers":
             case "minCampers":
             case "MINCAMPERS":
             case "mincampers": activityToModify.setMinCampers(Integer.parseInt(value));
+            broadcastMessage("activity edit " + activityID + " mincampers\"" + value + "\"");
                 break;
             case "MaxCampers":
             case "Maxcampers":
             case "maxCampers":
             case "MAXCAMPERS":
             case "maxcampers": activityToModify.setMaxCampers(Integer.parseInt(value));
+            broadcastMessage("activity edit " + activityID + " maxcampers\"" + value + "\"");
                 break;
             case "NeededStaff":
             case "Neededstaff":
             case "neededStaff":
             case "NEEDEDSTAFF":
             case "neededstaff": activityToModify.setNeededStaff(Integer.parseInt(value));
+            broadcastMessage("activity edit " + activityID + " neededstaff\"" + value + "\"");
                 break;
             case "MaxStaff":
             case "Maxstaff":
             case "maxStaff":
             case "MAXSTAFF":
             case "maxstaff": activityToModify.setMaxStaff(Integer.parseInt(value));
+            broadcastMessage("activity edit " + activityID + " maxstaff\"" + value + "\"");
                 break;
             case "PredeterminedRatio":
             case "Predeterminedratio":
             case "predeterminedRatio":
             case "PREDETERMINEDRATIO":
             case "predeterminedratio": activityToModify.setPredeterminedRatio(Double.parseDouble(value));
+            broadcastMessage("activity edit " + activityID + " predeterminedratio\"" + value + "\"");
                 break;
             case "ActivityName":
             case "Activityname":
             case "activityName":
             case "ACTIVITYNAME":
             case "activityname": activityToModify.setActivityName(value);
+            broadcastMessage("activity edit " + activityID + " activityname\"" + value + "\"");
                 break;
             case "StaffPrerequisites":
             case "Staffprerequisites":
             case "staffPrerequisites":
             case "STAFFPREREQUISITES":
             case "staffprerequisites": activityToModify.addToStaffPrerequisites(value);
+            broadcastMessage("activity edit " + activityID + " staffprerequisites\"" + value + "\"");
                 break;
             case "AssignedStaff":
             case "Assignedstaff":
             case "assignedStaff":
             case "ASSIGNEDSTAFF":
             case "assignedstaff": activityToModify.addToAssignedStaff(agentIDMap.get(Integer.parseInt(value)));
+            broadcastMessage("activity edit " + activityID + " assignedstaff\"" + value + "\"");
                 break;
             case "Row":
             case "ROW":
             case "row": activityToModify.setRow(Integer.parseInt(value));
+            broadcastMessage("activity edit " + activityID + " row\"" + value + "\"");
                 break;
             case "Broadcast":
             case "BROADCAST":
             case "broadcast": activityToModify.setBroadcast(Boolean.parseBoolean(value));
+            broadcastMessage("activity edit " + activityID + " broadcast\"" + value + "\"");
                 break;
             case "Duty":
             case "DUTY":
             case "duty": activityToModify.setIsDuty(Boolean.parseBoolean(value));
+            broadcastMessage("activity edit " + activityID + " duty\"" + value + "\"");
                 break;
         }
         
@@ -265,12 +280,12 @@ public class MasterTimeline implements Serializable {
     
     public synchronized void deleteActivity(int activityID) {        
         activities.remove(activityIDMap.remove(activityID));
-        broadcastUpdate("activity delete " + activityID);
+        broadcastMessage("activity delete " + activityID);
     }
     
     public synchronized void nameRow(int row, String name) {
         rowNameTable.put(row, name);
-        broadcastUpdate("row " + row + " " + name);
+        broadcastMessage("row " + row + " " + name);
     }
     
 //88""Yb 888888 88""Yb .dP"Y8 88 .dP"Y8 888888 888888 88b 88  dP""b8 888888     8b    d8 888888 888888 88  88  dP"Yb  8888b.  .dP"Y8 

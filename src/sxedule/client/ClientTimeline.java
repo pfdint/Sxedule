@@ -2,6 +2,7 @@ package sxedule.client;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,10 +34,10 @@ class ClientTimeline {
 ///   _ __  _ _|_ __    _ _|_ _  __
 //\__(_)| |_>  |_ | |_|(_  |_(_) | 
     
-    public ClientTimeline() {
-        agents = new HashSet<>();
+    ClientTimeline() {
+        agents = new LinkedHashSet<>();
         agentIDMap = new HashMap<>();
-        activities = new HashSet<>();
+        activities = new LinkedHashSet<>();
         activityIDMap = new HashMap<>();
     }
     
@@ -45,7 +46,7 @@ class ClientTimeline {
 // dP__Yb  Yb  "88 88""   88 Y88   88       88YbdP88 88""     88   888888 Yb   dP  8I  dY o.`Y8b 
 //dP""""Yb  YboodP 888888 88  Y8   88       88 YY 88 888888   88   88  88  YbodP  8888Y"  8bodP'
     
-    public void addDrawableAgent() {
+    void addDrawableAgent() {
         
         DrawableAgent createdDrawableAgent = new DrawableAgent();
         
@@ -56,7 +57,7 @@ class ClientTimeline {
         
     }
     
-    public void editDrawableAgent(int agentID, String restOfInput) {
+    void editDrawableAgent(int agentID, String restOfInput) {
         
         if (agentID >= agentIDMap.size()) {
             return;
@@ -115,7 +116,7 @@ class ClientTimeline {
         
     }
     
-    public void deleteDrawableAgent(int agentID) {
+    void deleteDrawableAgent(int agentID) {
         agents.remove(agentIDMap.remove(agentID));
     }
     
@@ -124,7 +125,7 @@ class ClientTimeline {
 // dP__Yb  Yb        88   88   YbdP   88   88     8P       88YbdP88 88""     88   888888 Yb   dP  8I  dY o.`Y8b 
 //dP""""Yb  YboodP   88   88    YP    88   88    dP        88 YY 88 888888   88   88  88  YbodP  8888Y"  8bodP' 
     
-    public void addDrawableActivity() {
+    void addDrawableActivity() {
         
         DrawableActivity createdDrawableActivity = new DrawableActivity();
         
@@ -135,7 +136,7 @@ class ClientTimeline {
         
     }
     
-    public void editDrawableActivity(int activityID, String restOfInput) {
+    void editDrawableActivity(int activityID, String restOfInput) {
         
         DrawableActivity activityToModify = activityIDMap.get(activityID);
         
@@ -224,8 +225,12 @@ class ClientTimeline {
         
     }
     
-    public void deleteDrawableActivity(int activityID) {        
+    void deleteDrawableActivity(int activityID) {        
         activities.remove(activityIDMap.remove(activityID));
+    }
+
+    DrawableActivity retrieveLastActivity() {
+        return activities.iterator().next();
     }
     
 }

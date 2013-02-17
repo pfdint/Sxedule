@@ -8,17 +8,13 @@ import java.awt.event.MouseWheelListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.MouseInputListener;
-import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
 
 class ActivityPanelListener implements MouseInputListener, MouseWheelListener, KeyListener {
     
-    private AsynchronousNetworkCommunicator networkCommunicator;
+    private GUI gui;
     
-    private ActivityPanel activityPanel;
-    
-    ActivityPanelListener(AsynchronousNetworkCommunicator networkCommunicator, ActivityPanel activityPanel) {
-        this.networkCommunicator = networkCommunicator;
-        this.activityPanel = activityPanel;
+    ActivityPanelListener(GUI gui) {
+        this.gui = gui;
     }
     
 //               
@@ -28,12 +24,13 @@ class ActivityPanelListener implements MouseInputListener, MouseWheelListener, K
     @Override
     public void mouseClicked(MouseEvent me) {
         System.out.println("Mouse clicked in Activity Panel!");
-        networkCommunicator.output("activity add");
+        gui.retrieveNetworkCommunicator().output("activity add");
         try {
             Thread.sleep(SxeduleClientMain.MAX_PING);
         } catch (InterruptedException ex) {
             Logger.getLogger(ActivityPanelListener.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     @Override

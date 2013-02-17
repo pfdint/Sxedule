@@ -39,9 +39,9 @@ class GUI {
         agentPanel = new AgentPanel();
         infoPanel = new InfoPanel();
         
-        activityPanelListener = new ActivityPanelListener(networkCommunicator, activityPanel);
-        agentPanelListener = new AgentPanelListener(networkCommunicator, agentPanel);
-        infoPanelListener = new InfoPanelListener(networkCommunicator, infoPanel);
+        activityPanelListener = new ActivityPanelListener(this);
+        agentPanelListener = new AgentPanelListener(this);
+        infoPanelListener = new InfoPanelListener(this);
         
         activityPanel.addMouseListener(activityPanelListener);
         agentPanel.addMouseListener(agentPanelListener);
@@ -66,5 +66,27 @@ class GUI {
         topFrame.setVisible(true);
         
     }
+
+    public AsynchronousNetworkCommunicator retrieveNetworkCommunicator() {
+        return networkCommunicator;
+    }
+
+    public ClientTimeline retrieveClientTimeline() {
+        return clientTimeline;
+    }
+
+    public ActivityPanel retrieveActivityPanel() {
+        return activityPanel;
+    }
+
+    public AgentPanel retrieveAgentPanel() {
+        return agentPanel;
+    }
+
+    public InfoPanel retrieveInfoPanel() {
+        return infoPanel;
+    }
+    
+    
     
 }
