@@ -1,7 +1,6 @@
 package sxedule.client;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -230,7 +229,11 @@ class ClientTimeline {
     }
 
     DrawableActivity retrieveLastActivity() {
-        return activities.iterator().next();
+        DrawableActivity activityToReturn = null;
+        while (activities.iterator().next() != null) {
+            activityToReturn = activities.iterator().next();
+        }
+        return activityToReturn;
     }
     
 }
