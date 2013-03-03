@@ -2,10 +2,20 @@ package sxedule.client;
 
 public class SxeduleClientMain {
     
-    public static final long MAX_PING = 50;
+    public static final String VERSION_STRING = "0:0";
+    
+    public static final int MAX_PING = 50;
+    
+    public static final String hostname = "localhost";
+    
+    public static final int portNumber = 25006;
+    
+    public static final int MASTER_WIDTH = 1200;
+    
+    public static final int MASTER_HEIGHT = 700;
 
     public static void main(String[] args) {
-        new GUI();
+        new GUIFactory().buildGUI();
     }
     
 }

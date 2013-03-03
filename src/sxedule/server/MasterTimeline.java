@@ -7,6 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
+import sxedule.shared.Activity;
+import sxedule.shared.Agent;
 
 public class MasterTimeline implements Serializable {
     
@@ -101,7 +103,7 @@ public class MasterTimeline implements Serializable {
         }
         
         String field = restOfInput.substring(1, positionOfSeparator);
-        String value = restOfInput.substring(positionOfSeparator + 1);
+        String value = restOfInput.substring(positionOfSeparator + 1, restOfInput.length() - 1);
         
 //        String field = restOfInput.substring(1, restOfInput.indexOf("\""));
 //        String value = restOfInput.substring(restOfInput.indexOf("\"") + 1, restOfInput.length() - 1);
@@ -186,7 +188,7 @@ public class MasterTimeline implements Serializable {
         }
         
         String field = restOfInput.substring(1, positionOfSeparator);
-        String value = restOfInput.substring(positionOfSeparator + 1);
+        String value = restOfInput.substring(positionOfSeparator + 1, restOfInput.length() - 1);
         
         switch (field) {
             case "StartTime":
@@ -271,7 +273,7 @@ public class MasterTimeline implements Serializable {
                 break;
             case "Duty":
             case "DUTY":
-            case "duty": activityToModify.setIsDuty(Boolean.parseBoolean(value));
+            case "duty": activityToModify.setDuty(Boolean.parseBoolean(value));
             broadcastMessage("activity edit " + activityID + " duty\"" + value + "\"");
                 break;
         }

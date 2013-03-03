@@ -1,13 +1,44 @@
 package sxedule.client;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Set;
-import sxedule.shared.AbstractActivity;
-import sxedule.shared.AbstractAgent;
+import javax.swing.JComponent;
+import sxedule.shared.Agent;
 
-public class DrawableActivity extends AbstractActivity {
+class DrawableActivity extends JComponent {
     
-    public DrawableActivity() {
-        super();
+    private long startTime;
+    private long endTime;
+    
+    private String activityName;
+    
+    private int row;
+    
+    private boolean broadcast;
+    private boolean isDuty;
+    
+    public static final int RECTANGLE_ROUNDNESS = 10;
+    
+    private Color activityColor = Color.GRAY;
+    private Color activityOutlineColor = Color.BLACK;
+    
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        
+        super.paintComponent(graphics);
+        
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        
+        //First, we set the body color and paint that round rectangle.
+        graphics2D.setColor(activityColor);
+        graphics2D.fillRoundRect(0, 0, getWidth(), getHeight(), RECTANGLE_ROUNDNESS, RECTANGLE_ROUNDNESS);
+        
+        //Second, we set the color of the outline and pain the same round rectangle.
+        graphics2D.setColor(activityOutlineColor);
+        graphics2D.drawRoundRect(0, 0, getWidth(), getHeight(), RECTANGLE_ROUNDNESS, RECTANGLE_ROUNDNESS);
+        
     }
     
 //.dP"Y8 888888 888888 888888 888888 88""Yb .dP"Y8 
@@ -15,79 +46,64 @@ public class DrawableActivity extends AbstractActivity {
 //o.`Y8b 88""     88     88   88""   88"Yb  o.`Y8b 
 //8bodP' 888888   88     88   888888 88  Yb 8bodP' 
     
-    @Override
     public void setStartTime(long startTime) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setEndTime(long endTime) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setMinCampers(int minCampers) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setMaxCampers(int maxCampers) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setNeededStaff(int neededStaff) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setMaxStaff(int maxStaff) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setPredeterminedRatio(double predeterminedRatio) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setActivityName(String activityName) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setStaffPrerequisites(Set<String> staffPrerequisites) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void addToStaffPrerequisites(String flagToAdd) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
-    public void setAssignedStaff(Set<AbstractAgent> assignedStaff) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setAssignedStaff(Set<Agent> assignedStaff) {
+        
     }
 
-    @Override
-    public void addToAssignedStaff(AbstractAgent staffMember) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void addToAssignedStaff(Agent staffMember) {
+        
     }
 
-    @Override
     public void setRow(int row) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setBroadcast(boolean broadcast) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
-    @Override
     public void setIsDuty(boolean isDuty) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     public long returnStartTime() {
@@ -98,36 +114,8 @@ public class DrawableActivity extends AbstractActivity {
         return endTime;
     }
 
-    public int returnMinCampers() {
-        return minCampers;
-    }
-
-    public int returnMaxCampers() {
-        return maxCampers;
-    }
-
-    public int returnNeededStaff() {
-        return neededStaff;
-    }
-
-    public int returnMaxStaff() {
-        return maxStaff;
-    }
-
-    public double returnPredeterminedRatio() {
-        return predeterminedRatio;
-    }
-
     public String returnActivityName() {
         return activityName;
-    }
-
-    public Set<String> retreiveStaffPrerequisites() {
-        return staffPrerequisites;
-    }
-
-    public Set<AbstractAgent> retrieveAssignedStaff() {
-        return assignedStaff;
     }
 
     public int returnRow() {

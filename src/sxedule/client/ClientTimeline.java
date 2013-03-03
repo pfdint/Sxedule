@@ -1,9 +1,11 @@
 package sxedule.client;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import sxedule.shared.Activity;
+import sxedule.shared.Agent;
 
 class ClientTimeline {
     
@@ -11,9 +13,9 @@ class ClientTimeline {
 //|_|(_| _ __ _|_   |_  o  _  |  _| _ 
 //| |__|(/_| | |_   |   | (/_ | (_|_> 
     
-    private Set<DrawableAgent> agents;
+    private Set<Agent> agents;
     
-    private Map<Integer, DrawableAgent> agentIDMap;
+    private Map<Integer, Agent> agentIDMap;
     
     private int agentIDLabeler = 0;
     
@@ -21,9 +23,9 @@ class ClientTimeline {
 //|_| _ _|_ o     o _|_ \/   |_  o  _  |  _| _ 
 //| |(_  |_ | \_/ |  |_ /    |   | (/_ | (_|_> 
     
-    private Set<DrawableActivity> activities;
+    private Set<Activity> activities;
     
-    private Map<Integer, DrawableActivity> activityIDMap;
+    private Map<Integer, Activity> activityIDMap;
     
     private int activityIDLabeler = 0;
     
@@ -34,9 +36,9 @@ class ClientTimeline {
 //\__(_)| |_>  |_ | |_|(_  |_(_) | 
     
     ClientTimeline() {
-        agents = new LinkedHashSet<>();
+        agents = new HashSet<>();
         agentIDMap = new HashMap<>();
-        activities = new LinkedHashSet<>();
+        activities = new HashSet<>();
         activityIDMap = new HashMap<>();
     }
     
@@ -45,24 +47,24 @@ class ClientTimeline {
 // dP__Yb  Yb  "88 88""   88 Y88   88       88YbdP88 88""     88   888888 Yb   dP  8I  dY o.`Y8b 
 //dP""""Yb  YboodP 888888 88  Y8   88       88 YY 88 888888   88   88  88  YbodP  8888Y"  8bodP'
     
-    void addDrawableAgent() {
+    void addAgent() {
         
-        DrawableAgent createdDrawableAgent = new DrawableAgent();
+        Agent createdAgent = new Agent();
         
-        agentIDMap.put(agentIDLabeler, createdDrawableAgent);
+        agentIDMap.put(agentIDLabeler, createdAgent);
         agentIDLabeler++;
         
-        agents.add(createdDrawableAgent);
+        agents.add(createdAgent);
         
     }
     
-    void editDrawableAgent(int agentID, String restOfInput) {
+    void editAgent(int agentID, String restOfInput) {
         
         if (agentID >= agentIDMap.size()) {
             return;
         }
         
-        DrawableAgent agentToModify = agentIDMap.get(agentID);
+        Agent agentToModify = agentIDMap.get(agentID);
         
         int positionOfSeparator = restOfInput.indexOf("\"");
         if (positionOfSeparator == -1) {
@@ -70,7 +72,7 @@ class ClientTimeline {
         }
         
         String field = restOfInput.substring(1, positionOfSeparator);
-        String value = restOfInput.substring(positionOfSeparator + 1);
+        String value = restOfInput.substring(positionOfSeparator + 1, restOfInput.length() - 1);
         
 //        String field = restOfInput.substring(1, restOfInput.indexOf("\""));
 //        String value = restOfInput.substring(restOfInput.indexOf("\"") + 1, restOfInput.length() - 1);
@@ -115,7 +117,7 @@ class ClientTimeline {
         
     }
     
-    void deleteDrawableAgent(int agentID) {
+    void deleteAgent(int agentID) {
         agents.remove(agentIDMap.remove(agentID));
     }
     
@@ -124,20 +126,20 @@ class ClientTimeline {
 // dP__Yb  Yb        88   88   YbdP   88   88     8P       88YbdP88 88""     88   888888 Yb   dP  8I  dY o.`Y8b 
 //dP""""Yb  YboodP   88   88    YP    88   88    dP        88 YY 88 888888   88   88  88  YbodP  8888Y"  8bodP' 
     
-    void addDrawableActivity() {
+    void addActivity() {
         
-        DrawableActivity createdDrawableActivity = new DrawableActivity();
+        Activity createdActivity = new Activity();
         
-        activityIDMap.put(activityIDLabeler, createdDrawableActivity);
+        activityIDMap.put(activityIDLabeler, createdActivity);
         activityIDLabeler++;
         
-        activities.add(createdDrawableActivity);
+        activities.add(createdActivity);
         
     }
     
-    void editDrawableActivity(int activityID, String restOfInput) {
+    void editActivity(int activityID, String restOfInput) {
         
-        DrawableActivity activityToModify = activityIDMap.get(activityID);
+        Activity activityToModify = activityIDMap.get(activityID);
         
         int positionOfSeparator = restOfInput.indexOf("\"");
         if (positionOfSeparator == -1) {
@@ -145,7 +147,7 @@ class ClientTimeline {
         }
         
         String field = restOfInput.substring(1, positionOfSeparator);
-        String value = restOfInput.substring(positionOfSeparator + 1);
+        String value = restOfInput.substring(positionOfSeparator + 1, restOfInput.length() - 1);
         
         switch (field) {
             case "StartTime":
@@ -218,22 +220,30 @@ class ClientTimeline {
                 break;
             case "Duty":
             case "DUTY":
-            case "duty": activityToModify.setIsDuty(Boolean.parseBoolean(value));
+            case "duty": activityToModify.setDuty(Boolean.parseBoolean(value));
                 break;
         }
         
     }
     
-    void deleteDrawableActivity(int activityID) {        
+    void deleteActivity(int activityID) {        
         activities.remove(activityIDMap.remove(activityID));
     }
-
-    DrawableActivity retrieveLastActivity() {
-        DrawableActivity activityToReturn = null;
-        while (activities.iterator().next() != null) {
-            activityToReturn = activities.iterator().next();
-        }
-        return activityToReturn;
+    
+    Set<Activity> retrieveActivitySet() {
+        return activities;
+    }
+    
+    Map<Integer, Activity> retrieveActivityIDMap() {
+        return activityIDMap;
+    }
+    
+    int returnLatestAgentID() {
+        return agentIDLabeler - 1;
+    }
+    
+    int returnLatestActivityID() {
+        return activityIDLabeler - 1;
     }
     
 }

@@ -1,15 +1,28 @@
-package sxedule.server; 
+package sxedule.shared; 
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import sxedule.shared.AbstractActivity;
-import sxedule.shared.AbstractAgent;
 
-public class Agent extends AbstractAgent implements Serializable { 
+public class Agent implements Serializable { 
+    
+    private String title;
+    private String firstName;
+    private String lastName;
+    private String uniqueTitle;
+    
+    private Set<String> flags;
+    
+    private Map<String, Integer> preferenceMap;
+    
+    private Set<Activity> personalTimeline;
     
     public Agent() {
-        super();
+        flags = new HashSet<>();
+        preferenceMap = new HashMap<>();
+        personalTimeline = new HashSet<>();
     }
     
 //.dP"Y8 888888 888888 888888 888888 88""Yb .dP"Y8 
@@ -17,32 +30,26 @@ public class Agent extends AbstractAgent implements Serializable {
 //o.`Y8b 88""     88     88   88""   88"Yb  o.`Y8b 
 //8bodP' 888888   88     88   888888 88  Yb 8bodP' 
     
-    @Override
     public void setTitle(String title) {
         this.title = title;
     }
     
-    @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     
-    @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     
-    @Override
     public void setUniqueTitle(String uniqueTitle) {
         this.uniqueTitle = uniqueTitle;
     }
     
-    @Override
     public void setFlags(Set<String> flags) {
         this.flags = flags;
     }
     
-    @Override
     public void addToFlags(String flagToAdd) {
         flags.add(flagToAdd);
     }
@@ -51,25 +58,21 @@ public class Agent extends AbstractAgent implements Serializable {
         return preferenceMap;
     }
 
-    @Override
     public void setPreferenceMap(Map<String, Integer> preferenceMap) {
         this.preferenceMap = preferenceMap;
     }
     
-    @Override
     public void addToPreferenceMap(String value) {
         String activityName = value.substring(0, value.indexOf(":"));
         int depth = Integer.parseInt(value.substring(value.indexOf(":") + 1));
         preferenceMap.put(activityName, depth);
     }
 
-    @Override
-    public void setPersonalTimeline(Set<AbstractActivity> personalTimeline) {
+    public void setPersonalTimeline(Set<Activity> personalTimeline) {
         this.personalTimeline = personalTimeline;
     }
     
-    @Override
-    public void addToPersonalTimeline(AbstractActivity activityToAdd) {
+    public void addToPersonalTimeline(Activity activityToAdd) {
         personalTimeline.add(activityToAdd);
     }
     
