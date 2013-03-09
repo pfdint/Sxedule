@@ -1,5 +1,6 @@
 package sxedule.client;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -7,12 +8,12 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
 
-class ActivityPanelListener implements MouseInputListener, MouseWheelListener, KeyListener {
+public class DrawableActivityListener implements MouseInputListener, MouseWheelListener, KeyListener {
     
-    private ActivityPanelController activityPanelController;
+    private DrawableActivity parentActivity;
     
-    ActivityPanelListener(ActivityPanelController activityPanelController) {
-        this.activityPanelController = activityPanelController;
+    DrawableActivityListener(DrawableActivity parentActivity) {
+        this.parentActivity = parentActivity;
     }
     
 //               
@@ -22,7 +23,8 @@ class ActivityPanelListener implements MouseInputListener, MouseWheelListener, K
     @Override
     public void mouseClicked(MouseEvent me) {
         if (me.getButton() == MouseEvent.BUTTON1) {
-            activityPanelController.requestNewActivity(me.getX());
+            parentActivity.setColor(Color.DARK_GRAY);
+            parentActivity.repaint();
         }
     }
 

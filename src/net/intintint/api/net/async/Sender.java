@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Sender implements Runnable {
+class Sender extends Thread {
         
     private ObjectOutputStream objectOutputStream;
 

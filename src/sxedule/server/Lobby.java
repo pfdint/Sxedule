@@ -1,20 +1,21 @@
 package sxedule.server;
 
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Set;
 import net.intintint.api.net.async.AcceptsInputObject;
 import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
 
 class Lobby implements AcceptsInputObject {
     
+    private CommandQueueManager commandQueueManager;
+    
     private AsynchronousNetworkCommunicator communicator;
     
-    Lobby(AsynchronousNetworkCommunicator connectionToAdd) {
+    Lobby(CommandQueueManager commandQueueManager, AsynchronousNetworkCommunicator connectionToAdd) {
+        this.commandQueueManager = commandQueueManager;
         communicator = connectionToAdd;
         communicator.setInputObjectAcceptor(this);
         communicator.initializeConnection();
-        welcome();
+        communicator.output("CONNECTION_ESTABLISHED");
     }
     
     @Override
@@ -26,39 +27,12 @@ class Lobby implements AcceptsInputObject {
         
         Scanner scanner = new Scanner(input);
         
-        MasterTimeline targetTimeline = null;
-        Set<MasterTimeline> serverTimelineSet = SxeduleServerMain.retrieveTimelineSet();
-        Iterator<MasterTimeline> iterator = serverTimelineSet.iterator();
-        int sizeOfSet = serverTimelineSet.size();
-        
         if (scanner.hasNextInt()) {
-            
-            int targetTimelineNumber = scanner.nextInt();
-            
-            if (targetTimelineNumber < sizeOfSet) {
-                for (int index = 0; index < targetTimelineNumber; index++) {
-                    targetTimeline = iterator.next();
-                }
-                usher(targetTimeline, targetTimelineNumber);
-            } else if (targetTimelineNumber == sizeOfSet) {
-                usher(SxeduleServerMain.createNewTimeline(), targetTimelineNumber);
-            } else {
-                communicator.output("That is not a valid Timeline number.");
-            }
-            
+            commandQueueManager.connect(communicator, scanner.nextInt());
         } else {
-            communicator.output("Specify a timeline to connect to or a number one greater than the current number of timelines.");
+            communicator.output("INPUT_NOT_INTEGER");
         }
         
-    }
-    
-    private void welcome() {
-        communicator.output("Welcome to the server! Specify a timeline to connect to or nothing will happen.");
-    }
-    
-    private void usher(MasterTimeline targetTimeline, int timelineNumber) {
-        communicator.output("Now connecting to Timeline " + timelineNumber);
-        targetTimeline.addConnection(communicator);
     }
     
 }

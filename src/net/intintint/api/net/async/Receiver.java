@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Receiver implements Runnable {
+class Receiver extends Thread {
         
     private InputStream inputStream;
     

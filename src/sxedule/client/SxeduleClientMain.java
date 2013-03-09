@@ -2,9 +2,7 @@ package sxedule.client;
 
 public class SxeduleClientMain {
     
-    public static final String VERSION_STRING = "0:0";
-    
-    public static final int MAX_PING = 50;
+    public static final String VERSION_STRING = "0:1";
     
     public static final String hostname = "localhost";
     

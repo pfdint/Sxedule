@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Activity implements Serializable { 
+public class Activity implements HasDuration, Serializable { 
     
     private long startTime;
     private long endTime;
@@ -103,10 +103,12 @@ public class Activity implements Serializable {
 //88"Yb  88""     88   88"Yb  88 88""     YbdP   88""   88"Yb  o.`Y8b 
 //88  Yb 888888   88   88  Yb 88 888888    YP    888888 88  Yb 8bodP' 
 
+    @Override
     public long returnStartTime() {
         return startTime;
     }
 
+    @Override
     public long returnEndTime() {
         return endTime;
     }

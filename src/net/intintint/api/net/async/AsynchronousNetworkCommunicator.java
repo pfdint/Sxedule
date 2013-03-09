@@ -53,8 +53,8 @@ public class AsynchronousNetworkCommunicator implements AsynchronousCommunicator
         receiver = new Receiver(inputObjectAcceptor, socket);
         sender = new Sender(socket);
         
-        new Thread(receiver).start();
-        new Thread(sender).start();
+        receiver.start();
+        sender.start();
         
     }
     
@@ -81,6 +81,9 @@ public class AsynchronousNetworkCommunicator implements AsynchronousCommunicator
     
     @Override
     public void terminateConnection() {
+        
+        sender.interrupt();
+        receiver.interrupt();
         
         sender = null;
         receiver = null;

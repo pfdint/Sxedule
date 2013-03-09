@@ -2,8 +2,6 @@ package sxedule.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
@@ -12,13 +10,13 @@ public class SxeduleServerMain {
     
     public static final int SERVER_PORT = 25006;
     
-    private static Set<MasterTimeline> timelineSet;
+    private static CommandQueueManager commandQueueManager;
     
     private static boolean listening;
     
     public static void main(String[] args) {
         
-        timelineSet = new LinkedHashSet<>();
+        commandQueueManager = new CommandQueueManager();
         
         listening = true;
         
@@ -38,7 +36,7 @@ public class SxeduleServerMain {
                 Logger.getLogger(SxeduleServerMain.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            new Lobby(newConnection);
+            new Lobby(commandQueueManager, newConnection);
             
         }
         
@@ -52,16 +50,6 @@ public class SxeduleServerMain {
     
     static void stop() {
         listening = false;
-    }
-    
-    static MasterTimeline createNewTimeline() {
-        MasterTimeline newTimeline = new MasterTimeline();
-        timelineSet.add(newTimeline);
-        return newTimeline;
-    }
-    
-    static Set<MasterTimeline> retrieveTimelineSet() {
-        return timelineSet;
     }
     
 }

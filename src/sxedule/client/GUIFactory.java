@@ -2,57 +2,75 @@ package sxedule.client;
 
 import javax.swing.JFrame;
 import net.intintint.api.net.async.AsynchronousNetworkCommunicator;
+import sxedule.shared.CommandQueue;
+import sxedule.shared.CommandQueueThread;
+import sxedule.shared.Timeline;
 
 class GUIFactory {
     
     void buildGUI() {
         
-        ClientTimeline clientTimeline = new ClientTimeline();
-        ClientParser clientParser = new ClientParser(clientTimeline);
+        Timeline timeline = new Timeline();
+        
+        CommandQueue commandQueue = new CommandQueue(timeline, false);
+        
+            new CommandQueueThread(commandQueue).start();
         
         AsynchronousNetworkCommunicator networkCommunicator = new AsynchronousNetworkCommunicator(SxeduleClientMain.hostname, SxeduleClientMain.portNumber);
-        networkCommunicator.setInputObjectAcceptor(clientParser);
-        networkCommunicator.initializeConnection();
         
-        //This is where we specify the timeline to connect to. Its placement here is provisional.
-        networkCommunicator.output("0");
+            commandQueue.addConnection(networkCommunicator);
         
-        ActivityPanel activityPanel = new ActivityPanel(clientTimeline);
-//        AgentPanel agentPanel = new AgentPanel(clientTimeline);
-//        InfoPanel infoPanel = new InfoPanel(clientTimeline);
+            networkCommunicator.initializeConnection();
+            
+                //This is provisional until there is user input for the desired timeline.
+                networkCommunicator.output("0");
         
-        ActivityPanelListener activityPanelListener = new ActivityPanelListener(networkCommunicator, activityPanel);
-//        AgentPanelListener agentPanelListener = new AgentPanelListener(networkCommunicator, agentPanel);
-//        InfoPanelListener infoPanelListener = new InfoPanelListener(networkCommunicator, infoPanel);
-        
-        activityPanel.addMouseListener(activityPanelListener);
-//        agentPanel.addMouseListener(agentPanelListener);
-//        infoPanel.addMouseListener(infoPanelListener);
-        
-        activityPanel.addMouseMotionListener(activityPanelListener);
-//        agentPanel.addMouseMotionListener(agentPanelListener);
-//        infoPanel.addMouseMotionListener(infoPanelListener);
-        
-        activityPanel.addMouseWheelListener(activityPanelListener);
-//        agentPanel.addMouseWheelListener(agentPanelListener);
-//        infoPanel.addMouseWheelListener(infoPanelListener);
-        
-        activityPanel.addKeyListener(activityPanelListener);
-//        agentPanel.addKeyListener(agentPanelListener);
-//        infoPanel.addKeyListener(infoPanelListener);
-        
+        //Activity Panel
+        ActivityPanel activityPanel = new ActivityPanel(timeline);
+        ActivityPanelController activityPanelController = new ActivityPanelController(timeline, networkCommunicator, activityPanel);
+        ActivityPanelListener activityPanelListener = new ActivityPanelListener(activityPanelController);
+            activityPanel.addMouseListener(activityPanelListener);
+            activityPanel.addMouseMotionListener(activityPanelListener);
+            activityPanel.addMouseWheelListener(activityPanelListener);
+            activityPanel.addKeyListener(activityPanelListener);
+            
+            commandQueue.attach(activityPanel);
+            
+//        //Agent Panel
+//        AgentPanel agentPanel = new AgentPanel(timeline);
+//        AgentPanelController agentPanelController = new AgentPanelController(timeline, networkCommunicator, agentPanel);
+//        AgentPanelListener agentPanelListener = new AgentPanelListener(agentPanelController);
+//            agentPanel.addMouseListener(agentPanelListener);
+//            agentPanel.addMouseMotionListener(agentPanelListener);
+//            agentPanel.addMouseWheelListener(agentPanelListener);
+//            agentPanel.addKeyListener(agentPanelListener);
+//            
+//            commandQueue.attach(agentPanel);
+//            
+//        //Info Panel
+//        InfoPanel infoPanel = new InfoPanel(timeline);
+//        InfoPanelController infoPanelController = new InfoPanelController(timeline, networkCommunicator, infoPanel);
+//        InfoPanelListener infoPanelListener = new InfoPanelListener(infoPanelController);
+//            infoPanel.addMouseListener(infoPanelListener);
+//            infoPanel.addMouseMotionListener(infoPanelListener);
+//            infoPanel.addMouseWheelListener(infoPanelListener);
+//            infoPanel.addKeyListener(infoPanelListener);
+//            
+//            commandQueue.attach(infoPanel);
+            
         JFrame topFrame = new JFrame();
         topFrame.setName("Sxedule version " + SxeduleClientMain.VERSION_STRING);
-        topFrame.setLocation(100, 100);
-        topFrame.setSize(SxeduleClientMain.MASTER_WIDTH, SxeduleClientMain.MASTER_HEIGHT);
+        topFrame.setSize(1000, 1000);
+        topFrame.setLocationRelativeTo(null);
         topFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         topFrame.add(activityPanel);
 //        topFrame.add(agentPanel);
 //        topFrame.add(infoPanel);
         
+        topFrame.pack();
         topFrame.setVisible(true);
-        
+                
     }
     
 }
